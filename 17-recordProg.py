@@ -35,7 +35,7 @@ def registration():
     else:
         user_name = input("Enter your username:")
         user_name = userName_valid(user_name)
-        user_password = input("Enter your password:")
+        user_password = password_valid()
         user_phone = phone_valid()
         user_age = age_valid()
         
@@ -130,12 +130,42 @@ def database_delete():
     
 def profile_update(user_found):
     print("-----")
-    option = input("Press 1 to change Email:\nPress 2 to change Username:\nPress 3 to change Phone:\nPress 4 to change age:")
+    option = input("Press 1 to change Email:\nPress 2 to change Username:\nPress 3 to change password:\nPress 4 to change Phone:\nPress 5 to change age:")
     if option == "1":
         change_email = email_valid()
         db[user_found]["email"] = change_email
         print("Email changed!")
+        print("------")
         user_profile(user_found)
+    elif option == "2":
+        change_username = userName_valid(str(input("Enter new username::")))
+        db[user_found]["u_name"] = change_username
+        print("Username changed!::")
+        print("------")
+        user_profile(user_found)
+    elif option == "3":
+        change_password = password_valid()
+        db[user_found]["password"] = change_password
+        print("Password changed!:")
+        user_profile(user_found)
+        
+    elif option == "4":
+        change_phone = phone_valid()
+        db[user_found]["phone"] = change_phone
+        print("Phone changed!::")
+        print("------")
+        user_profile(user_found)
+    elif option == "5":
+        change_age = age_valid()
+        db[user_found]["age"] = change_age
+        print("Age changed!::")
+        print("------")
+        user_profile(user_found)
+    else:
+        print("Option invalid!!::")
+        
+        user_profile(user_found)
+
 def userName_valid(username):
     scorted_username = ""
     validName = []
@@ -145,7 +175,31 @@ def userName_valid(username):
         scorted_username += str(validName[i]) + "_"
     return scorted_username
 
-
+def password_valid():
+    count = 0
+    spaceFound = False
+    while True:
+            
+            
+            user_pssword = input("Enter yout password:") 
+            for i in user_pssword:
+                if i == " ":
+                    spaceFound = True
+                    #print("Please enter without spaces")
+                    break
+                else:
+                    count += 1
+            if count >= len(user_pssword):
+                 return user_pssword
+                 break
+                 
+            else:
+                spaceFound = False
+                print("Password must not contain spaces!!:")
+                pass
+        
+                
+        
 def email_valid():
     count = 0
     spaceFound = False
