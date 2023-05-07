@@ -38,39 +38,80 @@ def registration():
         user_password = password_valid()
         user_phone = phone_valid()
         user_age = age_valid()
-        
-
-           
-                        
-            
-
-       
         id = len(db)
 
         to_insert = {id: {"email": user_email,"u_name":user_name, "password": user_password,"phone":user_phone,"age":user_age}}
         db.update(to_insert)
-
+        print("------")
 
 def login():
+    print("-----")
     user_found=-1
-    
+    trial = 3
     print("This is login sector")
-    l_user_email = input("Enter your email to login:")
-    l_user_password = input("Enter your password to login:")
-
-
-    for i in range(len(db)):
-        if db[i]["email"] == l_user_email and db[i]["password"]==l_user_password:
-
-            user_found=i
-    if user_found!=-1:
-        print("Login Success!")
-        user_profile(user_found)
+    print("------")
+    while True:
+        
+        l_user_email = email_valid()
         print("------")
-    else:
-        print("Not Found ")
-        print("------")
+        for i in range(len(db)):
+            if db[i]["email"] == l_user_email:
+                
+                for x in range(3):
+                    l_user_password = password_valid()
+                    if db[i]["password"]==l_user_password:
+                        user_found = i
+                        break
+                    else:
+                        trial -= 1
+                        print("Wrong Password " + str(trial) + " Time Left::")
+                        
+                        if trial == 0:
+                            print("Log-in section expired::")
+                            print("------")
+                            
+                            break
+            
+                            
 
+            
+                
+                
+        
+
+        
+                
+        if user_found!=-1:
+            print("Login Success!")
+            user_profile(user_found)
+            print("------")
+            break
+        else:
+           print("Email not found!!")
+           print("------")
+           while True: 
+            
+            
+            login_option = input("Press 1 to Login Again::\nPress 2 to go Main Sector::")
+            if login_option == "1":
+                
+                print("------")
+                break
+                
+            elif login_option == "2":
+                
+                break
+                
+                print("------")
+            else:
+                print("Option invalid!!:")
+                print("------")
+                pass
+        if login_option == "2":
+            break
+        else:
+            pass
+            
 def user_profile(user_found):
     print("User Info")
     print("------")
@@ -130,13 +171,20 @@ def database_delete():
     
 def profile_update(user_found):
     print("-----")
-    option = input("Press 1 to change Email:\nPress 2 to change Username:\nPress 3 to change password:\nPress 4 to change Phone:\nPress 5 to change age:")
+    option = input("Press 1 to change Email:\nPress 2 to change Username:\nPress 3 to change password:\nPress 4 to change Phone:\nPress 5 to change age:\nPress 6 to go to Main Sector::")
     if option == "1":
-        change_email = email_valid()
-        db[user_found]["email"] = change_email
-        print("Email changed!")
-        print("------")
-        user_profile(user_found)
+        while True:
+            change_email = email_valid()
+            email_get = Email_exit(change_email)
+
+            if email_get!=None:
+                print("Email already exit:")
+            else:
+                db[user_found]["email"] = change_email
+                print("Email changed!")
+                print("------")
+                user_profile(user_found)
+                break
     elif option == "2":
         change_username = userName_valid(str(input("Enter new username::")))
         db[user_found]["u_name"] = change_username
@@ -161,6 +209,9 @@ def profile_update(user_found):
         print("Age changed!::")
         print("------")
         user_profile(user_found)
+    elif option == "6":
+        main_sector()
+        
     else:
         print("Option invalid!!::")
         
@@ -181,7 +232,7 @@ def password_valid():
     while True:
             
             
-            user_pssword = input("Enter yout password:") 
+            user_pssword = input("Enter your password:") 
             for i in user_pssword:
                 if i == " ":
                     spaceFound = True
@@ -264,6 +315,7 @@ def age_valid():
     spaceFound = False
     while True:
             count = 0
+
             user_age = input("Enter your age:")
             for i in user_age:
                 if i == " ":
